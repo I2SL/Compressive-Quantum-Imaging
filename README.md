@@ -1,7 +1,7 @@
 # Compressive Quantum Imaging
 Author: Nicolas Deshler
 
-[The Paper](https://www.overleaf.com/project/62e435a228736e7fca864bea) can be found here.
+Please see [the manuscript](https://www.overleaf.com/project/62e435a228736e7fca864bea).
 
 This package unifies ideas from compressive sensing and quantum parameter estimation to passively image incoherent distributed scenes at multiple resolution levels extending beyond the diffraction limit. We take inspiration from [[1]](https://iopscience.iop.org/article/10.1088/1367-2630/aa60ee) and use an adaptive bayesian approach to estimate parameters of the scene. Since natural images are generally compressible in a wavelet basis, this algorithm adaptively estimates wavelet coefficients while enforcing a sparsity prior. The bayesian framework for quantum parameter estimation is detailed in [[2]](https://ieeexplore.ieee.org/document/1054643).
 
