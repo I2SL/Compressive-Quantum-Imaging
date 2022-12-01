@@ -27,7 +27,7 @@ This algorithm employs Spatial Mode Demultiplexing (SPADE) detailed in [[3]](htt
 To download the repository in a desired local directory `my/dir/path/` open a Git terminal run
 ```
 cd my/dir/path/
-git clone https://github.com/NicoDeshler/Compressive-Quantum-Imaging.git
+git clone https://github.com/I2SL/Compressive-Quantum-Imaging.git
 ```
 Enter the project directory 
 ```
@@ -45,31 +45,10 @@ This section is set up to demonstrate our compressive quantum superresolution im
 - The target scene exists entirely within the sub-Rayleigh regime. That is, the angular extent of the image is equal to the rayleigh limit. 
 - 
 ```
-matlab main(scene)
+matlab main()
 ```
 There are a collection of optional arguments that a user may choose to include as well for better performance
 
-```
-W : a representation matrix for the signal
-coords : a coordinate system over which the wavelets are defined
-rl : rayleigh limit
-```
-
-You can run simulated reconstruction of a desired target image where the support falls within the rayleigh w
-The algorithm can be shown to work in simulation by running it on a scene supplied by the user. 
-
-
-The main script `PersonickWavletEstimation.m` reads a target image from the working directory. The entire image is assumed to be sparse in the 'db1' wavelet basis. Its spatial extent resides within the Rayleigh width of a direct imaging system. Photon counting on SPADE measurements are simulated and the Bayesian adaptive measurement scheme is applied to recover the image.
-
-- $\texttt{imgFile}$ : Filename for the target image (must be a grayscale image in the working directory)
-- $\texttt{Npho}$ : Number of photons collected between adaptations
-- $\texttt{Nsamples}$ : Number of posterior samples taken
-
-```
-matlab img_out = PersonickWaveletEstimation(imgFile,Npho,Nsamples)
-```
-
-# Test Examples
 
 
 
