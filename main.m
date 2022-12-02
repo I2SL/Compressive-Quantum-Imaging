@@ -10,20 +10,11 @@ n_post_samples = 1e5;
 n_photons =  1e5;
 max_iter = 50;
 
-[MMSE_est, mu_seq, cov_seq, l_seq, B_seq, x0, T, W] = simulateCQE(n_post_samples, n_photons, max_iter,'rng_seed',seed);
+[MMSE_est, mu_seq, cov_seq, l_seq, B_seq, x0, T, W] = simulateCQE(n_post_samples, n_photons, max_iter,...
+                                                                'rng_seed',seed,...
+                                                                'posterior_method', 'conjugate',...
+                                                                'prior_name','dirichlet');
 
 save
-
-%{
-
-% show target params vs reconstruction
-figure
-x0 = (M*V)\w0;
-stem(x0,'filled','black')
-hold on
-stem(MMSE_est,'filled','red')
-hold off
-
-%}
 
 end

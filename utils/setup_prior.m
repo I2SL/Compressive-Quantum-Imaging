@@ -3,7 +3,7 @@ function prior_obj = setup_prior(prior_name)
 switch prior_name
     
     case 'dirichlet'
-        params.alpha = [];
+        params.alpha = ones(16,1);
         
         prior_obj = DirichletPrior(params);
 
