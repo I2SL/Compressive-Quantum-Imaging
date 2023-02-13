@@ -28,7 +28,6 @@ B_vec = SLD(T1_vec, T0);
 
 % compute the QBCRLB matrix
 E_Q = Sigma_Q(T0,B_vec,x_mu,x_cov);
-%E_Q = E_Q(1:end-1,1:end-1); % crop out augmented parameter
 
 % get the eigenvectors of QBCRLB matrix
 [V_Q,~] = eig(E_Q);

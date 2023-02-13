@@ -12,21 +12,39 @@ function [MMSE_est, mu_seq, cov_seq, l_seq, B_seq, x0, T, W] ...
 % -------------------------------------------------------------------------
 % OPTIONAL INPUTS 
 % -------------------------------------------------------------------------
+% target            - a desired target signal (otherwise random)
 % rl                - Rayleigh length (fractional size of the signal support)
-% n_HG_modes        - number of HG modes (along 1D)
+% n_HG_modes        - number of HG modes (along 1D). This must be < 170.
 % n_HG_samples      - number of samples to discretize HG modes (along 1D)
 % prior_name        - name of sparsity prior to apply to parameters [dirichlet,mvn,gbm,laplace,cifar10gbm]
 % posterior_method  - name of posterior method to use [K_informative, cumulative, conjugate]
-%
+% K                 - number of K-informative measurements to keep from one iteration to the next (only takes effect if posterior method is 'K_informative' )
+% rng_seed          - seed for the random number generator
+% d                 - dimensionality of signal (1D, 2D, etc.) 
+% depth             - depth of wavelet decomposition
 % -------------------------------------------------------------------------
 % OUTPUTS
 % -------------------------------------------------------------------------
-% MMSE_est          -
-% mu_seq            -
+% MMSE_est          - Minimum Mean Squared Error Estimator of target
+%                     parameters
+% mu_seq            - the sequence of MMSE estimates across iterations
 %
-% 
+% cov_seq `         - the sequence of covariance estimates across
+%                     iterations
+%
+% l_seq             - sequence of measurements (photons per mode) made
+%                     across iterations.
+%
+% B_seq             - sequence of measurement matrices across iteration
+%
+% x0                - ground truth parameters
+%
+% T                 - constraint matrix
+%
+% W                 - Wavelet transform matrix
 %
 % Author: Nico Deshler
+% To Lola and my family. I love you!
 % -------------------------------------------------------------------------
 
 
@@ -48,7 +66,7 @@ addOptional(p,'target',[]);
 addOptional(p,'rl',1);
 addOptional(p,'n_HG_modes',12);
 addOptional(p,'n_HG_samples',(2^5)+1);
-addOptional(p,'prior_name','cifar10gbm');
+addOptional(p,'prior_name','dirichlet');
 addOptional(p,'posterior_method','K_informative');
 addOptional(p,'K',5);
 addOptional(p,'rng_seed',0);
@@ -115,9 +133,13 @@ if isempty(target)
     target = reshape(target, dims);
 end
 
+stem(x0)
+
 % make sure target signal is valid
+%{
 assert(abs(sum(target(:))- 1) < 1e-15, 'target intensity signal not normalized');
 assert(all(target(:) >= -1e-15), 'target intensity signal has negative values');
+%}
 
 % instantiate measurement object
 x0 = (W*T) \ target(:);       % ground truth parameters

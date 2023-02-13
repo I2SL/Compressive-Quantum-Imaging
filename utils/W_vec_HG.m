@@ -61,6 +61,12 @@ end
 
 W_vec = zeros(N_modes,N_modes,N_params);
 
+if gpuDeviceCount("available")
+    W = gpuArray(W);
+    XX = gpuArray(XX);
+    YY = gpuArray(YY);
+end
+
 for i = 1:N_modes
     for j = 1:N_modes
         p = HG_proj(i).ind_x;
@@ -86,6 +92,7 @@ for i = 1:N_modes
     end
 end
 
+W_vec = gather(W_vec);
 end
 
 

@@ -24,7 +24,7 @@ classdef DirichletPrior < Prior
             % assign mean and covariance
             a0 = sum(obj.alpha);
             obj.mu = obj.alpha/a0;
-            obj.cov = (diag(alpha)/a0 - (obj.alpha * obj.alpha')/(a0^2))/(a0+1);
+            obj.cov = (diag(obj.alpha)/a0 - (obj.alpha * obj.alpha')/(a0^2))/(a0+1);
         end
         
         % prior probability
@@ -37,7 +37,7 @@ classdef DirichletPrior < Prior
             p = prod(gamma(obj.alpha)) / gamma(sum(obj.alpha)) .* prod(x.^(obj.alpha-1),1);
 
             % log prior
-            ln_p = sum(obj.alpha.*log(x),1); % + const.
+            ln_p = sum((obj.alpha-1).*log(x),1) + sum(log(gamma(obj.alpha))) - log(gamma(sum(obj.alpha)));
 
             % gradient of log prior
             grad_ln_p = obj.alpha ./ x;

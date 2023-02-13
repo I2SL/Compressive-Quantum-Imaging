@@ -14,13 +14,28 @@ switch prior_name
         prior_obj = MVNPrior(params);
         
     case 'gbm'
-         params.q = [];
-         params.cov0 = [];
-         params.cov1 = [];
-         params.mu0 = [];
-         params.mu1 = [];
+        
+        % instantiate a mutli-level prior where the first random variable
+        % is a delta prior
+        params.P_objects = cell(2,1);
+        
+        % level 0 (delta)
+        prms_0 = struct();
+        prms_0.isCompositional = 0;
+        prms_0.x = 1;
+        params.P_objects{1} = DeltaPrior(prms_0);
+        
+        % level > 0 
+        prms_gbm = struct();
+        prms_gbm.q = .24;
+        prms_gbm.cov0 = eye(15)*.1;
+        prms_gbm.cov1 = eye(15)*10;
+        prms_gbm.mu0  = zeros(15,1);
+        prms_gbm.mu1 = zeros(15,1);
 
-         prior_obj = GBMPrior(params);
+        params.P_objects{2} = GBMPrior(prms_gbm);
+        
+        prior_obj = MultilevelPrior(params);
         
     case 'cifar10gbm'
         

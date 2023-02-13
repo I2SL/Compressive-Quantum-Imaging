@@ -19,7 +19,13 @@ classdef DeltaPrior < Prior
         
         % prior probability
         function [p, ln_p, grad_ln_p] = prob(obj,x)
-            p = 1.0.*all(x == obj.mu);
+            if numel(obj.mu)>1
+                %p = double(ismember(x',obj.mu','rows')'); % exact vector equality
+                p = double(vecnorm(x-obj.mu) < 1e-9); % tolerance vector equality
+            else
+                %p = double(x == obj.mu); % exact scalar equality
+                p = double((x-obj.mu) < 1e-9);  % tolerance scalar equality
+            end
             ln_p = log(p);
             grad_ln_p = zeros(numel(obj.mu),size(x,2));
         end

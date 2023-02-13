@@ -84,8 +84,17 @@ classdef SimulatedMeasurement < Measurement
                 p_eig = p_eig/sum(p_eig);
 
                 %% Generate samples from the likelihood
-                % sample the indices of each outcome from the discrete distribution
-                % p_eig associated with the probability of singl-photon detections in measurement eigenstates
+                % sample the modal indices in which each detected photon is found from the discrete distribution
+                % p_eig associated with the probability of single-photon detections in the measurement eigenstates
+                measurement = datasample(1:numel(p_eig),obj.n_pho,'Weights',p_eig)';
+    
+                % l_vec contains the total photon count in each mode
+                [gc,gs] = groupcounts(measurement);
+                l_vec = zeros(1,numel(p_eig));
+                l_vec(gs) = gc;
+                
+                
+                %{
                 ind = datasample(1:numel(p_eig),obj.n_pho,'weights',p_eig)';
 
                 % l_vec contains the count of the number of times each outcome appeared
@@ -95,7 +104,8 @@ classdef SimulatedMeasurement < Measurement
                 min_ind = min(ind);
                 max_ind = max(ind);
                 l_vec = [zeros(1-min_ind,1);l_vec;zeros(numel(p_eig)-max_ind,1)];
-
+                %}
+                
                 % decrement the number of measurement available and trigger
                 % stop flag if no measurements are left.
                 obj.m_available = obj.m_available -1;

@@ -94,8 +94,39 @@ p_eig = p_eig./sum(p_eig,1);
 p_like = mnpdf(l_vec', p_eig')';
 
 %% compute log likelihood
+% log likelihood of multinomial distribution
 rep_l_vec = repmat(l_vec,[1,M]);
 ln_like = sum(rep_l_vec.*real(log(p_eig + (rep_l_vec == 0 & p_eig == 0))),1); % + const.
+
+% compute the constant coming from the factorials
+n_fac_max = 170;             % max integer that matlab can take the factorial of while still giving a non-inf double
+sterling = @(n) n.*log(n)-n; % sterling approximation to log(n!)
+N = sum(l_vec);
+if N <= n_fac_max
+    log_N = log(factorial(N));
+else
+    log_N = sterling(N);
+end
+log_n = zeros(size(l_vec));        
+log_n(l_vec <= n_fac_max) = log(factorial(l_vec(l_vec <= n_fac_max)));
+log_n(l_vec > n_fac_max) = sterling(l_vec(l_vec > n_fac_max));
+offset = log_N - sum(log_n); % log( N!/ ( n1! ... nM!) )
+
+ln_like = ln_like + offset;
+
+%{
+figure
+nln_like = ln_like;
+nln_like(ln_like == -inf) = 0;
+nln_like = nln_like - min(nln_like);
+nln_like(ln_like == -inf) = 0;
+nln_like = nln_like/max(nln_like);
+scatter3(x(1,:),x(2,:),x(3,:),.1,nln_like+1e-9);
+c = colorbar
+title(c,'Normalized Log-Likelihood')
+xlabel('1');ylabel('2');zlabel('3')
+%}
+
 
 %% compute gradient of log likelihood
 % compute coefficients for operator expectations
