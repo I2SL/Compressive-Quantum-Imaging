@@ -30,10 +30,13 @@ B_vec = SLD(T1_vec, T0);
 E_Q = Sigma_Q(T0,B_vec,x_mu,x_cov);
 
 % get the eigenvectors of QBCRLB matrix
-[V_Q,~] = eig(E_Q);
+[V_Q,D_Q] = eig(E_Q);
+
+% get the index of the minimum eigenvector
+[~,i] = min(diag(D_Q));
 
 % choose joint-parameter projection direction to be the min eigenvector
-h = V_Q(:,1);   % eigenvectors are ordered least to greatest by eig function, so choose the first one.
+h = V_Q(:,i);
 
 % update the joint parameter estimator (measurement matrix) for the subsequent measurement    
 B_gamma = MatMulVecOp(h',B_vec);

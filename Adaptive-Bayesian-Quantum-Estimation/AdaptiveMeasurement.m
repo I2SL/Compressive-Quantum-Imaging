@@ -39,7 +39,7 @@ while ~measurement_obj.stop_flag
     % update the parameter moments given new measurement
     [posterior_obj, x_mu,x_cov] = posterior_obj.PosteriorMoments(l_vec_seq, B_gamma_seq, Y_vec,...
                                                   x_mu_seq, x_cov_seq);
-    
+                                              
     % compute the next measurement operator                                        
     if posterior_obj.prior_obj.isCompositional
        B_gamma = JointParameterEstimator(Y_vec, x_mu, x_cov);

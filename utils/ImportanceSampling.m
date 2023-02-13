@@ -7,6 +7,9 @@ function [x_mu, x_cov, valid_count] = ImportanceSampling(post_fn, ref_fn, ref_rn
     % ref_pdf   - a function handle to the pdf of reference distribution
     % N_samples - the number of samples used to compute the posterior
     %             moments
+    %
+    % References: 
+    % https://dept.stat.lsa.umich.edu/~jasoneg/Stat406/lab7.pdf
 
     % draw samples from the reference distribution
     samples = ref_rnd(N_samples);
@@ -53,9 +56,32 @@ function [x_mu, x_cov, valid_count] = ImportanceSampling(post_fn, ref_fn, ref_rn
     % normalizing constant
     C = sum(pdf_ratio);
     
-    % approximate expected value of the posterior
-    x_mu = sum(samples.*pdf_ratio,2)/C;
+    % measure for good reference distribution
+    ESS = sqrt(mean((pdf_ratio./mean(pdf_ratio) - 1).^2)); % should be less than 5 for a good estimator
     
+    % estimate the first moment of the posterior (expected value)
+    x_mu = sum(pdf_ratio .* samples,2) / C;
+    
+    % estimate the second moment of the posterior
+    sv = reshape(samples,[size(samples,1),1,size(samples,2)]);
+    sh = reshape(samples,[1,size(samples,1),size(samples,2)]);
+    pr = reshape(pdf_ratio,[1,1,numel(pdf_ratio)]);
+    xx = sum(pr .* sv .* sh ,3) / C;
+       
+    % estimate the covariance of the posterior
+    x_cov = xx - x_mu*x_mu';
+    
+    
+    % make covariance positive semidefinite
+    epsilon = 1e-10;
+    ev = eig(x_cov);
+    if ~all(ev >0)
+        x_cov = x_cov + (epsilon - min(ev))*eye(size(x_cov));
+    end
+    
+    
+    
+    %{
     % approximate the covariance of the posterior
     delta = samples - x_mu;
     
@@ -65,7 +91,9 @@ function [x_mu, x_cov, valid_count] = ImportanceSampling(post_fn, ref_fn, ref_rn
     for i = 1:valid_count
         x_cov = x_cov + pdf_ratio(i) * (delta(:,i) * delta(:,i)');
     end
-    x_cov = x_cov/C;
+    
+    x_cov = x_cov;
+    %}
     
     %{
     % visualize the log posterior density in 3D

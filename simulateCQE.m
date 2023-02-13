@@ -123,11 +123,14 @@ Y_vec = MatMulVecOp(T.',W_vec);
 target = p.Results.target;
 if isempty(target)
     x0 = prior_obj.rnd(1);                  % sample the prior to generate a target signal
+    
+    %{
     if ~prior_obj.isCompositional
         % shift non-compositional samples back into constraint polytope
         temp = V\x0; temp = temp - min(temp);   
         x0 = V*temp/sum(temp);
     end
+    %}
     target = W*T*x0;
     dims = (numel(target)^(1/d)) * ones(1,d);
     target = reshape(target, dims);

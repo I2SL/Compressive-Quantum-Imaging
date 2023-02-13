@@ -98,20 +98,9 @@ p_like = mnpdf(l_vec', p_eig')';
 rep_l_vec = repmat(l_vec,[1,M]);
 ln_like = sum(rep_l_vec.*real(log(p_eig + (rep_l_vec == 0 & p_eig == 0))),1); % + const.
 
-% compute the constant coming from the factorials
-n_fac_max = 170;             % max integer that matlab can take the factorial of while still giving a non-inf double
-sterling = @(n) n.*log(n)-n; % sterling approximation to log(n!)
+% compute the the log of the factorials in the multinomial
 N = sum(l_vec);
-if N <= n_fac_max
-    log_N = log(factorial(N));
-else
-    log_N = sterling(N);
-end
-log_n = zeros(size(l_vec));        
-log_n(l_vec <= n_fac_max) = log(factorial(l_vec(l_vec <= n_fac_max)));
-log_n(l_vec > n_fac_max) = sterling(l_vec(l_vec > n_fac_max));
-offset = log_N - sum(log_n); % log( N!/ ( n1! ... nM!) )
-
+offset = log_factorial(N) - sum(log_factorial(l_vec)); % log( N!/ ( n1! ... nM!) )
 ln_like = ln_like + offset;
 
 %{

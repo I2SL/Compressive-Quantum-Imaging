@@ -37,7 +37,8 @@ classdef DeltaPrior < Prior
         
         % match first and second moments
         function obj = match(obj,x_mu,x_cov)
-            obj.mu = x_mu;        
+            %obj.mu = x_mu;  
+            return
         end
         
     end
