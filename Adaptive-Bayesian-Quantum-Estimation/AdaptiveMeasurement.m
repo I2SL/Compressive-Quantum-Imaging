@@ -58,6 +58,8 @@ while ~measurement_obj.stop_flag
     x_cov_seq(:,:,i) = x_cov;
     l_vec_seq(:,i) = l_vec;
     B_gamma_seq(:,:,i) = B_gamma;
+    
+    save('x_mu_seq','x_cov_seq','l_vec_seq','B_gamma_seq')
 
 end
 

@@ -25,26 +25,16 @@ function [MMSE_est, mu_seq, cov_seq, l_seq, B_seq, x0, T, W] ...
 % -------------------------------------------------------------------------
 % OUTPUTS
 % -------------------------------------------------------------------------
-% MMSE_est          - Minimum Mean Squared Error Estimator of target
-%                     parameters
+% MMSE_est          - Minimum Mean Squared Error Estimator of target parameters
 % mu_seq            - the sequence of MMSE estimates across iterations
-%
-% cov_seq `         - the sequence of covariance estimates across
-%                     iterations
-%
-% l_seq             - sequence of measurements (photons per mode) made
-%                     across iterations.
-%
-% B_seq             - sequence of measurement matrices across iteration
-%
+% cov_seq `         - the sequence of covariance estimates across iterations
+% l_seq             - sequence of measurements (photons per mode) made across iterations
+% B_seq             - sequence of measurement matrices across iterations
 % x0                - ground truth parameters
-%
 % T                 - constraint matrix
-%
 % W                 - Wavelet transform matrix
 %
 % Author: Nico Deshler
-% To Lola and my family. I love you!
 % -------------------------------------------------------------------------
 
 
@@ -123,14 +113,12 @@ Y_vec = MatMulVecOp(T.',W_vec);
 target = p.Results.target;
 if isempty(target)
     x0 = prior_obj.rnd(1);                  % sample the prior to generate a target signal
-    
-    %{
     if ~prior_obj.isCompositional
         % shift non-compositional samples back into constraint polytope
         temp = V\x0; temp = temp - min(temp);   
         x0 = V*temp/sum(temp);
     end
-    %}
+    
     target = W*T*x0;
     dims = (numel(target)^(1/d)) * ones(1,d);
     target = reshape(target, dims);
@@ -139,10 +127,9 @@ end
 stem(x0)
 
 % make sure target signal is valid
-%{
 assert(abs(sum(target(:))- 1) < 1e-15, 'target intensity signal not normalized');
 assert(all(target(:) >= -1e-15), 'target intensity signal has negative values');
-%}
+
 
 % instantiate measurement object
 x0 = (W*T) \ target(:);       % ground truth parameters
