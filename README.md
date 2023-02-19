@@ -41,15 +41,13 @@ If the last command doesn't work then matlab does not have an environment variab
 
 
 # Running the code
-This section is set up to demonstrate our compressive quantum superresolution imaging algorithm in simulation. The target scene (a square graysacle image) is the only required input parameter for the program. There are several assumptions that this program makes:
+This section is set up to demonstrate our compressive quantum superresolution imaging algorithm in simulation. The target scene (a square graysacle image) is the only required input parameter for the program. There are two assumptions that this program makes:
 - The target scene exists entirely within the sub-Rayleigh regime. That is, the angular extent of the image is equal to the rayleigh limit. 
-- 
+- The dimensions of the image are a power of 2
 ```
 matlab main()
 ```
-There are a collection of optional arguments that a user may choose to include as well for better performance
-
-
+There are a collection of optional arguments that a user may choose to include as well for better performance.
 
 
 # References
