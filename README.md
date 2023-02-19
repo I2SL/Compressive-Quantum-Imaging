@@ -1,7 +1,7 @@
 # Compressive Quantum Imaging
 Author: Nicolas Deshler
 
-Please see [the manuscript](https://www.overleaf.com/project/62e435a228736e7fca864bea).
+Please see [the manuscript](https://www.overleaf.com/read/prtpjfbtbpjy).
 
 This package unifies ideas from compressive sensing and quantum parameter estimation to passively image incoherent distributed scenes at multiple resolution levels extending beyond the diffraction limit. We take inspiration from [[1]](https://iopscience.iop.org/article/10.1088/1367-2630/aa60ee) and use an adaptive bayesian approach to estimate parameters of the scene. Since natural images are generally compressible in a wavelet basis, this algorithm adaptively estimates wavelet coefficients while enforcing a sparsity prior. The bayesian framework for quantum parameter estimation is detailed in [[2]](https://ieeexplore.ieee.org/document/1054643).
 
@@ -41,15 +41,13 @@ If the last command doesn't work then matlab does not have an environment variab
 
 
 # Running the code
-This section is set up to demonstrate our compressive quantum superresolution imaging algorithm in simulation. The target scene (a square graysacle image) is the only required input parameter for the program. There are several assumptions that this program makes:
+This section is set up to demonstrate our compressive quantum superresolution imaging algorithm in simulation. The target scene (a square graysacle image) is the only required input parameter for the program. There are two assumptions that this program makes:
 - The target scene exists entirely within the sub-Rayleigh regime. That is, the angular extent of the image is equal to the rayleigh limit. 
-- 
+- The dimensions of the image are a power of 2
 ```
 matlab main()
 ```
-There are a collection of optional arguments that a user may choose to include as well for better performance
-
-
+There are a collection of optional arguments that a user may choose to include as well for better performance.
 
 
 # References
